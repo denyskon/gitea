@@ -1,4 +1,4 @@
-name: sync-trnalsations
+name: sync-translations
 on:
   schedule:
     - cron: "7 0 * * *" # every day at 00:07 UTC
@@ -11,7 +11,7 @@ on:
 jobs:
   crowdin-pull:
     runs-on: ubuntu-latest
-    if: github.repository == 'go-gitea/gitea' || gitea.repository == 'denyskon/gitea'
+    if: github.repository == 'go-gitea/gitea' || github.repository == 'denyskon/gitea'
     steps:
       - uses: actions/checkout@v4
       - uses: crowdin/github-action@v1
