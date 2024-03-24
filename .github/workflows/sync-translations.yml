@@ -11,7 +11,7 @@ on:
 jobs:
   crowdin-pull:
     runs-on: ubuntu-latest
-    if: github.repository == 'go-gitea/gitea'
+    if: github.repository == 'go-gitea/gitea' || gitea.repository == 'denyskon/gitea'
     steps:
       - uses: actions/checkout@v4
       - uses: crowdin/github-action@v1
