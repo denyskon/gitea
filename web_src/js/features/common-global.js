@@ -2,7 +2,6 @@ import $ from 'jquery';
 import '../vendor/jquery.are-you-sure.js';
 import {clippie} from 'clippie';
 import {createDropzone} from './dropzone.js';
-import {initCompColorPicker} from './comp/ColorPicker.js';
 import {showGlobalErrorMessage} from '../bootstrap.js';
 import {handleGlobalEnterQuickSubmit} from './comp/QuickSubmit.js';
 import {svg} from '../svg.js';
@@ -19,7 +18,7 @@ const {appUrl, appSubUrl, csrfToken, i18n} = window.config;
 export function initGlobalFormDirtyLeaveConfirm() {
   // Warn users that try to leave a page after entering data into a form.
   // Except on sign-in pages, and for forms marked as 'ignore-dirty'.
-  if ($('.user.signin').length === 0) {
+  if (!$('.user.signin').length) {
     $('form:not(.ignore-dirty)').areYouSure();
   }
 }
@@ -195,8 +194,6 @@ export function initGlobalCommon() {
   //   eg: the "Create New Repo" menu on the navbar.
   $uiDropdowns.filter('.upward').dropdown('setting', 'direction', 'upward');
   $uiDropdowns.filter('.downward').dropdown('setting', 'direction', 'downward');
-
-  $('.ui.checkbox').checkbox();
 
   $('.tabular.menu .item').tab();
 
@@ -379,10 +376,7 @@ function initGlobalShowModal() {
         $attrTarget.text(attrib.value); // FIXME: it should be more strict here, only handle div/span/p
       }
     }
-    const $colorPickers = $modal.find('.color-picker');
-    if ($colorPickers.length > 0) {
-      initCompColorPicker(); // FIXME: this might cause duplicate init
-    }
+
     $modal.modal('setting', {
       onApprove: () => {
         // "form-fetch-action" can handle network errors gracefully,
