@@ -20,9 +20,7 @@ jobs:
           upload_translations: false
           download_sources: false
           download_translations: true
-          skip_untranslated_strings: true
-          export_only_approved: true
-          localization_branch_name: l10n_crowdin_translations
+          localization_branch_name: crowdin-translations
           push_translations: true
           create_pull_request: true
           pull_request_title: 'New Crowdin Translations'
@@ -33,6 +31,25 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_KEY }}
+      - uses: actions/checkout@v4
+        with:
+          ref: crowdin-translations
+          token: ${{ secrets.GH_TOKEN }}
+      - name: update locales
+        run: ./build/update-locales.sh
+      - name: push translations to repo
+        uses: appleboy/git-push-action@v0.0.3
+        with:
+          author_email: "teabot@gitea.io"
+          author_name: GiteaBot
+          branch: main
+          commit: true
+          force: true
+          commit_message: "[skip ci] Updated translations via Crowdin"
+          remote: "https://github.com/denyskon/gitea.git"
+          #ssh_key: ${{ secrets.DEPLOY_KEY }}
+          netrc_username: denyskon
+          netrc_password: ${{ secrets.GH_TOKEN }}
   #crowdin-pull:
   #  runs-on: ubuntu-latest
   #  if: github.repository == 'go-gitea/gitea'
