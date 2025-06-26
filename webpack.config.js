@@ -15,6 +15,8 @@ import tailwindcss from 'tailwindcss';
 import tailwindConfig from './tailwind.config.js';
 import tailwindcssNesting from 'tailwindcss/nesting/index.js';
 import postcssNesting from 'postcss-nesting';
+import CopyPlugin from 'copy-webpack-plugin';
+import path from 'path';
 
 const {EsbuildPlugin} = EsBuildLoader;
 const {SourceMapDevToolPlugin, DefinePlugin, EnvironmentPlugin} = webpack;
@@ -249,10 +251,20 @@ export default {
       },
       override: {
         'khroma@*': {licenseName: 'MIT'}, // https://github.com/fabiospampinato/khroma/pull/33
+        '@bundled-es-modules/message-format@*': {licenseName: 'MIT'},
       },
       emitError: true,
       allow: '(Apache-2.0 OR 0BSD OR BSD-2-Clause OR BSD-3-Clause OR MIT OR ISC OR CPAL-1.0 OR Unlicense OR EPL-1.0 OR EPL-2.0)',
     }) : new AddAssetPlugin('licenses.txt', `Licenses are disabled during development`),
+    new CopyPlugin({
+      patterns: [
+        // Copy Shoelace assets to dist/shoelace
+        {
+          from: 'node_modules/@shoelace-style/shoelace/dist/assets',
+          to: 'shoelace/assets'
+        }
+      ]
+    })
   ],
   performance: {
     hints: false,
